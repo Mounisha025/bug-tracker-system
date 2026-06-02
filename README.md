@@ -1,2 +1,16 @@
-# bug-tracker-system
-Enterprise Bug Tracking and Project Management System built with Spring Boot, PostgreSQL, JWT, React and Hibernate.
+# Bug Tracking System
+
+A full-stack bug tracking platform built with:
+
+- Spring Boot
+- PostgreSQL
+- JWT
+- React
+- Hibernate
+
+## Features
+
+- Authentication
+- Project Management
+- Bug Assignment
+- Dashboard
