@@ -31,4 +31,17 @@ public class ProjectService {
     public void deleteProject(Long id) {
         projectRepository.deleteById(id);
     }
+
+    public Project updateProject(Long id, Project updatedProject) {
+
+        return projectRepository.findById(id)
+                .map(project -> {
+
+                    project.setName(updatedProject.getName());
+                    project.setDescription(updatedProject.getDescription());
+
+                    return projectRepository.save(project);
+                })
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+    }
 }
