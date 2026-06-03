@@ -34,9 +34,17 @@ public class SecurityConfig {
                                 "/api/auth/**")
                         .permitAll()
 
+                        .requestMatchers("/api/users/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers("/api/projects/**")
+                        .hasAnyRole("ADMIN", "DEVELOPER")
+
+                        .requestMatchers("/api/bugs/**")
+                        .hasAnyRole("ADMIN", "DEVELOPER", "TESTER")
+
                         .anyRequest()
-                        .authenticated()
-                )
+                        .authenticated())
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
