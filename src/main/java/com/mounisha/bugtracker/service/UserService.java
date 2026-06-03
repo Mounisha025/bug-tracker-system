@@ -1,6 +1,7 @@
 package com.mounisha.bugtracker.service;
 
 import com.mounisha.bugtracker.entity.User;
+import com.mounisha.bugtracker.exception.ResourceNotFoundException;
 import com.mounisha.bugtracker.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,13 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public User getUserEntityById(Long id) {
+
+        return userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found with id: " + id));
     }
 }

@@ -2,10 +2,10 @@ package com.mounisha.bugtracker.entity;
 
 import com.mounisha.bugtracker.enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
@@ -21,9 +21,11 @@ public class User {
 
     private String name;
 
+    @Email(message = "Invalid email format")
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Size(min = 4, message = "Password must be at least 4 characters")
     private String password;
 
     @Enumerated(EnumType.STRING)
