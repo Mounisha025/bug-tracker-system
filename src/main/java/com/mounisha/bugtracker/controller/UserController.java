@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import jakarta.validation.Valid;
 
+import com.mounisha.bugtracker.dto.UserRequestDTO;
+import com.mounisha.bugtracker.dto.UserResponseDTO;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -19,8 +22,10 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
-        return userService.createUser(user);
+    public UserResponseDTO createUser(
+            @RequestBody UserRequestDTO dto) {
+
+        return userService.createUser(dto);
     }
 
     @GetMapping

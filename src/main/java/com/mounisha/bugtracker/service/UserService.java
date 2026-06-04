@@ -5,6 +5,8 @@ import com.mounisha.bugtracker.exception.ResourceNotFoundException;
 import com.mounisha.bugtracker.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.mounisha.bugtracker.dto.UserRequestDTO;
+import com.mounisha.bugtracker.dto.UserResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,5 +53,29 @@ public class UserService {
 
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public UserResponseDTO createUser(
+            UserRequestDTO dto) {
+
+        User user = new User();
+
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+
+        user.setPassword(
+                passwordEncoder.encode(dto.getPassword()));
+
+        user.setRole(dto.getRole());
+
+        User savedUser =
+                userRepository.save(user);
+
+        return new UserResponseDTO(
+                savedUser.getId(),
+                savedUser.getName(),
+                savedUser.getEmail(),
+                savedUser.getRole()
+        );
     }
 }
