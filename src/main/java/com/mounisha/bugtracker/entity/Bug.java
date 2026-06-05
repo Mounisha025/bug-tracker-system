@@ -4,6 +4,7 @@ import com.mounisha.bugtracker.enums.BugStatus;
 import com.mounisha.bugtracker.enums.Priority;
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 import java.time.LocalDateTime;
@@ -35,14 +36,17 @@ public class Bug {
     private LocalDateTime updatedAt;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "project_id")
     private Project project;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "reported_by")
     private User reportedBy;
 }
