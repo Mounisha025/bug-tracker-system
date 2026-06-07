@@ -18,15 +18,27 @@ public class JwtService {
     }
 
     // Generate JWT Token
-    public String generateToken(String email) {
+    public String generateToken(
+            String email,
+            String role) {
 
         return Jwts.builder()
+
                 .subject(email)
+
+                .claim("role", role)
+
                 .issuedAt(new Date())
+
                 .expiration(
-                        new Date(System.currentTimeMillis()
-                                + 1000 * 60 * 60))
+                        new Date(
+                                System.currentTimeMillis()
+                                        + 1000 * 60 * 60
+                        )
+                )
+
                 .signWith(getKey())
+
                 .compact();
     }
 

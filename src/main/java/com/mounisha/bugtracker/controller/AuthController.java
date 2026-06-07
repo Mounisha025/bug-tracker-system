@@ -36,7 +36,9 @@ public class AuthController {
                         user.get().getPassword())) {
 
             return jwtService.generateToken(
-                    user.get().getEmail());
+                    user.get().getEmail(),
+                    user.get().getRole().name()
+            );
         }
 
         return "Invalid email or password";
