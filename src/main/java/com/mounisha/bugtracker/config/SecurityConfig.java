@@ -29,6 +29,7 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
 
 //                .httpBasic(Customizer.withDefaults())
 
