@@ -5,6 +5,8 @@ import com.mounisha.bugtracker.enums.Priority;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 import java.time.LocalDateTime;
@@ -25,6 +27,8 @@ public class Bug {
 
     private String description;
 
+    private String screenshot;
+
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
@@ -36,17 +40,18 @@ public class Bug {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "project_id")
     private Project project;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "reported_by")
     private User reportedBy;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "bug")
+    private List<Comment> comments;
 }

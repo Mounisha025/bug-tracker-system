@@ -2,25 +2,34 @@ package com.mounisha.bugtracker.config;
 
 import com.mounisha.bugtracker.service.CustomUserDetailsService;
 import com.mounisha.bugtracker.service.JwtService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.security.authentication.
         UsernamePasswordAuthenticationToken;
+
 import org.springframework.security.core.context.
         SecurityContextHolder;
+
 import org.springframework.security.core.userdetails.
         UserDetails;
+
 import org.springframework.security.web.authentication.
         WebAuthenticationDetailsSource;
+
 import org.springframework.stereotype.Component;
+
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtFilter
+        extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
@@ -28,56 +37,99 @@ public class JwtFilter extends OncePerRequestFilter {
             userDetailsService;
 
     public JwtFilter(
-            JwtService jwtService,
-            CustomUserDetailsService userDetailsService) {
 
-        this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
+            JwtService jwtService,
+
+            CustomUserDetailsService
+                    userDetailsService
+
+    ) {
+
+        this.jwtService =
+                jwtService;
+
+        this.userDetailsService =
+                userDetailsService;
     }
 
     @Override
     protected void doFilterInternal(
+
             HttpServletRequest request,
+
             HttpServletResponse response,
-            FilterChain filterChain)
-            throws ServletException, IOException {
+
+            FilterChain filterChain
+
+    )
+
+            throws ServletException,
+            IOException {
 
         final String authHeader =
-                request.getHeader("Authorization");
+
+                request.getHeader(
+                        "Authorization"
+                );
 
         String jwt = null;
+
         String email = null;
-// Check Authorization Header
-        if (authHeader != null &&
-                authHeader.startsWith("Bearer ")) {
 
-            jwt = authHeader.substring(7);
+        // CHECK AUTH HEADER
+        if (authHeader != null
 
-            email = jwtService.extractEmail(jwt);
+                && authHeader.startsWith(
+                "Bearer "
+        )) {
+
+            jwt =
+                    authHeader.substring(7);
+
+            email =
+                    jwtService.extractEmail(jwt);
         }
-// Authenticate User
-        if (email != null &&
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication() == null) {
+
+        // AUTHENTICATE USER
+        if (email != null
+
+                && SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                == null) {
 
             UserDetails userDetails =
+
                     userDetailsService
-                            .loadUserByUsername(email);
+                            .loadUserByUsername(
+                                    email
+                            );
 
             if (jwtService.validateToken(
-                    jwt,
-                    userDetails.getUsername())) {
 
-                UsernamePasswordAuthenticationToken authToken =
+                    jwt,
+
+                    userDetails.getUsername()
+
+            )) {
+
+                UsernamePasswordAuthenticationToken
+                        authToken =
+
                         new UsernamePasswordAuthenticationToken(
+
                                 userDetails,
+
                                 null,
-                                userDetails.getAuthorities());
+
+                                userDetails.getAuthorities()
+                        );
 
                 authToken.setDetails(
+
                         new WebAuthenticationDetailsSource()
-                                .buildDetails(request));
+                                .buildDetails(request)
+                );
 
                 SecurityContextHolder
                         .getContext()
@@ -85,19 +137,50 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(
+                request,
+                response
+        );
     }
 
     @Override
     protected boolean shouldNotFilter(
-            HttpServletRequest request) {
+            HttpServletRequest request
+    ) {
 
-        String path = request.getServletPath();
+        String path =
+                request.getServletPath();
 
-        return path.contains("/v3/api-docs")
+        return path.contains("/api/auth")
+
+                // TEMPORARY PUBLIC BUG APIs
+                || path.contains("/api/bugs")
+
+                //|| path.contains("/api/users")
+
+                || path.contains("/api/projects")
+
+                || path.contains("/api/comments")
+
+                || path.contains("/api/activities")
+
+                || path.contains("/api/email")
+
+                || path.contains("/api/dashboard")
+
+                || path.contains("/api/notifications")
+
+                || path.contains("/v3/api-docs")
+
                 || path.contains("/swagger-ui")
-                || path.contains("/swagger-resources")
-                || path.contains("/webjars");
-    }
 
+                || path.contains("/swagger-resources")
+
+                || path.contains("/webjars");
+
+
+
+
+
+    }
 }

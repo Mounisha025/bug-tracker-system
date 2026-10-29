@@ -33,3 +33,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Uploaded files
+uploads/
